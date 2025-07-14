@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchAllFoods } from "../api/FoodApi";
-
+import FoodCard from "./KhmerFood";
 function Home() {
   const [foods, setFoods] = useState([]);
 
@@ -76,7 +76,7 @@ function Home() {
             </div>
           </div>
         </div>
-
+      <FoodCard /> 
         {/* Floating Food Icons */}
         <div className="hidden md:block absolute top-20 left-10 text-4xl opacity-20">
           🍕
@@ -86,30 +86,7 @@ function Home() {
         </div>
       </section>
       {/* Popular food  */}
-
-      <section>
-        <h2 className="text-4xl md:text-6xl font-bold text-gray-800 m-6">
-          Hot Food
-        </h2>
-
-        <div className="grid grid-cols-1 m-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {foods.map((food) => (
-            <div
-              key={food.idMeal}
-              className="bg-white shadow-md rounded-lg overflow-hidden"
-            >
-              <img
-                src={food.strMealThumb}
-                alt={food.strMeal}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4">
-                <h3 className="text-lg font-semibold mb-2">{food.strMeal}</h3>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+\
     </>
   );
 }

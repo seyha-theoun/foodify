@@ -1,0 +1,74 @@
+[
+  {
+    "id": "k001",
+    "name": "Samlor Korko",
+    "image": "https://i.ytimg.com/vi/KPOzXeeVKo8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBJZHmo-XHMDxeZO2_I9LjBdzkVPg",
+    "description": "Samlor Korko is a traditional Cambodian soup...",
+    "ingredients": ["Fish", "Vegetables", "Herbs", "Spices"],
+    "category": "Khmer",
+    "price": 5.99
+  },
+  {
+    "id": "k002",
+    "name": "Amok Fish",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/7/76/2016_Phnom_Penh%2C_Amok_trey_%2802%29.jpg",
+    "description": "Amok Fish is a classic Cambodian dish...",
+    "ingredients": ["Fish", "Coconut Milk", "Spices", "Banana Leaf"],
+    "category": "Khmer",
+    "price": 7.49
+  },
+  {
+    "id": "k003",
+    "name": "Nom Banh Chok",
+    "image": "https://dev-mot-visit-cambodia.kesspay.io/uploads/0000/227/2024/08/28/nhung-mon-an-duong-pho-phnom-penh-3.webp",
+    "description": "Nom Banh Chok is a popular Cambodian breakfast dish...",
+    "ingredients": ["Rice Noodles", "Fish Gravy", "Vegetables"],
+    "category": "Khmer",
+    "price": 3.99
+  },
+  {
+    "id": "k004",
+    "name": "Bai Sach Chrouk",
+    "image": "https://grantourismotravels.com/wp-content/uploads/2020/04/Cambodian-Pork-and-Rice-Recipe-Bai-Sach-Chrouk-Copyright-2022-Terence-Carter-Grantourismo-T.jpg",
+    "description": "Bai Sach Chrouk is a traditional Cambodian dish...",
+    "ingredients": ["Grilled Pork", "Rice", "Pickled Vegetables"],
+    "category": "Khmer",
+    "price": 4.50
+  },
+  {
+    "id": "k005",
+    "name": "Ban Chhev",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM5ZHJZuk27AlJ_k7q2XlzSdGXNOgqehufZQ&s",
+    "description": "Ban Chhev is a Cambodian crepe filled with ground meat...",
+    "ingredients": ["Rice Flour", "Turmeric", "Pork", "Mung Bean Sprouts"],
+    "category": "Khmer",
+    "price": 4.99
+  },
+  {
+    "id": "k006",
+    "name": "Kuy Teav",
+    "image": "https://www.tuktukbox.com/cdn/shop/articles/kuy_teav_1170x.jpg?v=1707526833",
+    "description": "Kuy Teav is a Cambodian noodle soup...",
+    "ingredients": ["Rice Noodles", "Pork/Beef Broth", "Garlic", "Scallions"],
+    "category": "Khmer",
+    "price": 5.25
+  },
+  {
+    "id": "k007",
+    "name": "Lap Khmer",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGj20JveMM4YFKfX1mtePqsL_-bDoysQSkMg&s",
+    "description": "Lap Khmer is a Cambodian beef ceviche...",
+    "ingredients": ["Beef", "Lime Juice", "Herbs", "Chili"],
+    "category": "Khmer",
+    "price": 6.50
+  },
+  {
+    "id": "k008",
+    "name": "Prahok Ktis",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6VZ4zycpXYmT3_DURKfaaKdysoYWaMaK8Lw&s",
+    "description": "Prahok Ktis is a creamy Cambodian dip...",
+    "ingredients": ["Prahok", "Coconut Milk", "Pork", "Kaffir Lime"],
+    "category": "Khmer",
+    "price": 4.75
+  }
+]
