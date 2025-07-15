@@ -6,7 +6,6 @@ export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
 
   function addToCart(item) {
-    // Optional: check if item already exists and increase quantity instead
     setCartItems((prev) => [...prev, item]);
   }
 
@@ -16,8 +15,14 @@ export function CartProvider({ children }) {
     );
   }
 
+  function clearCart() {
+    setCartItems([]); // ✅ Clears the cart
+  }
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
+    <CartContext.Provider
+      value={{ cartItems, addToCart, removeFromCart, clearCart }} // ✅ Added here
+    >
       {children}
     </CartContext.Provider>
   );

@@ -9,6 +9,7 @@ function Checkout() {
     name: "",
     phone: "",
     address: "",
+    email: "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -24,12 +25,9 @@ function Checkout() {
   );
 
   const sendPreorderEmail = (orderData) => {
-    const serviceID =
-      "service_u5jdbm4";
-    const templateID =
-       "template_9xwiglg";
-    const publicKey =
-     "WnNEAsyUU7iSZw4Ii";
+    const serviceID = "service_u5jdbm4";
+    const templateID = "template_9xwiglg";
+    const publicKey = "WnNEAsyUU7iSZw4Ii";
 
     const itemsDescription = orderData.cartItems
       .map(
@@ -40,6 +38,7 @@ function Checkout() {
     const templateParams = {
       from_name: orderData.name,
       from_email: "noreply@yourdomain.com",
+      email: orderData.email,
       phone: orderData.phone,
       address: orderData.address,
       order_summary: itemsDescription,
@@ -49,13 +48,14 @@ function Checkout() {
     return emailjs.send(serviceID, templateID, templateParams, publicKey);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (
-      !customer.name.trim() ||
-      !customer.phone.trim() ||
-      !customer.address.trim()
+      !customer.name ||
+      !customer.phone ||
+      !customer.address ||
+      !customer.email
     ) {
       setStatus({ message: "Please fill in all fields.", isSuccess: false });
       return;
@@ -65,48 +65,42 @@ function Checkout() {
     setStatus({ message: "", isSuccess: null });
 
     const orderData = {
-      name: customer.name,
-      phone: customer.phone,
-      address: customer.address,
+      ...customer,
       cartItems,
       totalPrice,
     };
 
-    sendPreorderEmail(orderData)
-      .then(() => {
-        setStatus({
-          message: `Thank you, ${customer.name}! Your preorder has been sent.`,
-          isSuccess: true,
-        });
-        clearCart();
-        setCustomer({ name: "", phone: "", address: "" });
-
-        // Optional: clear message after 5 seconds
-        setTimeout(() => {
-          setStatus({ message: "", isSuccess: null });
-        }, 5000);
-      })
-      .catch((err) => {
-        console.error("EmailJS error:", err?.text || err);
-        let errorMsg = "Failed to send preorder. Please try again later.";
-        if (
-          err &&
-          err.text &&
-          !err.text.includes("recipients address is empty")
-        ) {
-          errorMsg += ` (${err.text})`;
-        }
-        setStatus({ message: errorMsg, isSuccess: false });
-      })
-      .finally(() => {
-        setIsLoading(false);
+    try {
+      await sendPreorderEmail(orderData);
+      setStatus({
+        message: `Thank you, ${customer.name}! Your order has been sent.`,
+        isSuccess: true,
       });
+
+      // ✅ Show success alert
+      alert(
+        `🎉 Thank you, ${customer.name}! Your order was placed successfully.`
+      );
+
+      clearCart();
+      setCustomer({ name: "", phone: "", address: "", email: "" });
+
+      setTimeout(() => setStatus({ message: "", isSuccess: null }), 5000);
+    } catch (err) {
+      console.error("EmailJS error:", err);
+      setStatus({
+        message: "Failed to send order. Please try again later.",
+        isSuccess: false,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (cartItems.length === 0) {
     return (
       <div className="p-4 text-center text-gray-700">
-        Your cart is empty. Please add some food before checking out.
+        Your cart is empty. Please add items before checking out.
       </div>
     );
   }
@@ -150,8 +144,23 @@ function Checkout() {
         </div>
 
         <div>
+          <label htmlFor="email" className="block font-medium mb-1">
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            value={customer.email}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded px-3 py-2"
+            required
+          />
+        </div>
+
+        <div>
           <label htmlFor="phone" className="block font-medium mb-1">
-            Phone Number
+            Phone
           </label>
           <input
             id="phone"
@@ -160,7 +169,6 @@ function Checkout() {
             value={customer.phone}
             onChange={handleChange}
             className="w-full border border-gray-300 rounded px-3 py-2"
-            placeholder="+855 12 345 678"
             required
           />
         </div>
@@ -172,11 +180,10 @@ function Checkout() {
           <textarea
             id="address"
             name="address"
+            rows={3}
             value={customer.address}
             onChange={handleChange}
             className="w-full border border-gray-300 rounded px-3 py-2"
-            rows={3}
-            placeholder="123 Food St, Culinary City"
             required
           />
         </div>

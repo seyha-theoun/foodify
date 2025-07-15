@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { fetchAllFoods } from "../api/FoodApi";
 import { CartContext } from "../context/CartContext";
-
-// Import Khmer food JSON directly
 import khmerFoodData from "../data/khmerFoods.json";
 
 function Menu() {
@@ -11,6 +9,7 @@ function Menu() {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [error, setError] = useState(null);
+  const [selectedRecipe, setSelectedRecipe] = useState(null); // ✅ Added
 
   const { addToCart } = useContext(CartContext);
 
@@ -20,11 +19,8 @@ function Menu() {
         setLoading(true);
         setError(null);
 
-        // Fetch remote foods
         const remoteData = await fetchAllFoods();
-        console.log("Remote data fetched:", remoteData);
 
-        // Normalize remote data safely, default category 'European'
         const remoteDataWithCategory = Array.isArray(remoteData)
           ? remoteData.map((item) => ({
               ...item,
@@ -32,19 +28,16 @@ function Menu() {
               id:
                 item.idMeal ||
                 item.id ||
-                Math.random().toString(36).substr(2, 9), // fallback ID
+                Math.random().toString(36).substr(2, 9),
               name: item.strMeal || item.name || "Unknown Food",
               image: item.strMealThumb || item.image || "",
-              price: item.price || 0, // default price if missing
+              strInstructions: item.strInstructions || "",
+              strYoutube: item.strYoutube || "",
+              price: item.price || 0,
             }))
           : [];
 
-        console.log("Normalized remote data:", remoteDataWithCategory);
-
-        // Combine remote and Khmer foods — comment this out to test remote data alone
         const combinedData = [...remoteDataWithCategory, ...khmerFoodData];
-
-        console.log("Combined data count:", combinedData.length);
 
         setFoods(combinedData);
         setFilteredFoods(combinedData);
@@ -61,7 +54,6 @@ function Menu() {
 
   const handleFilter = (category) => {
     setSelectedCategory(category);
-
     if (category === "All") {
       setFilteredFoods(foods);
     } else {
@@ -75,7 +67,7 @@ function Menu() {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 relative">
       <h1 className="text-2xl font-bold mb-4">🍲 Food Menu</h1>
 
       {/* Filter buttons */}
@@ -95,11 +87,11 @@ function Menu() {
         ))}
       </div>
 
-      {/* Loading/Error states */}
+      {/* Loading/Error */}
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-600">Error: {error}</p>}
 
-      {/* Food grid */}
+      {/* Food Grid */}
       {!loading && !error && filteredFoods.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {filteredFoods.map((food) => (
@@ -119,14 +111,20 @@ function Menu() {
                 </div>
               )}
               <h2 className="text-lg font-semibold mb-1">{food.name}</h2>
-              <p className="text-sm text-gray-700 mb-4">
+              <p className="text-sm text-gray-700 mb-2">
                 Price: {food.price ? `$${food.price.toFixed(2)}` : "N/A"}
               </p>
               <button
                 onClick={() => addToCart(food)}
-                className="mt-auto bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
+                className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
               >
                 Add to Cart
+              </button>
+              <button
+                onClick={() => setSelectedRecipe(food)}
+                className="mt-2 bg-green-600 hover:bg-green-700 text-white py-2 rounded"
+              >
+                View Recipe
               </button>
             </div>
           ))}
@@ -134,6 +132,50 @@ function Menu() {
       ) : (
         !loading &&
         !error && <p>No food data available for selected category.</p>
+      )}
+
+      {/* ✅ Recipe Modal */}
+      {selectedRecipe && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-lg relative">
+            <h2 className="text-2xl font-bold mb-4">{selectedRecipe.name}</h2>
+            {selectedRecipe.image && (
+              <img
+                src={selectedRecipe.image}
+                alt={selectedRecipe.name}
+                className="w-full h-64 object-cover rounded mb-4"
+              />
+            )}
+            <p className="mb-2">
+              <strong>Category:</strong> {selectedRecipe.category || "Unknown"}
+            </p>
+            <p className="mb-2">
+              <strong>Price:</strong> $
+              {selectedRecipe.price ? selectedRecipe.price.toFixed(2) : "N/A"}
+            </p>
+            {selectedRecipe.strInstructions && (
+              <p className="mb-2 whitespace-pre-line">
+                <strong>Instructions:</strong> {selectedRecipe.strInstructions}
+              </p>
+            )}
+            {selectedRecipe.strYoutube && (
+              <a
+                href={selectedRecipe.strYoutube}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline block mt-2"
+              >
+                📺 Watch on YouTube
+              </a>
+            )}
+            <button
+              onClick={() => setSelectedRecipe(null)}
+              className="mt-4 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
+            >
+              Close
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
