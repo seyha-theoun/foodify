@@ -4,7 +4,7 @@ import baiSachChroukImage from "../assets/photo/baiSachChrouk.jpg";
 import nomBanhChokImage from "../assets/photo/nomBanhChok.jpg";
 import samlorKorkoImage from "../assets/photo/samlorKorko.jpg";
 import banchavImage from "../assets/photo/banchav.jpg";
-import kuyteavImage from "../assets/photo/kuyteav.jpg";
+
 import labkhmerImage from "../assets/photo/labkhmer.png";
 import prahokktissImage from "../assets/photo/prahokktiss.jpg";
 
@@ -45,13 +45,7 @@ export default function Food() {
       ingredients: ["Rice Flour", "Turmeric", "Pork", "Mung Bean Sprouts"],
       image: banchavImage,
     },
-    {
-      name: "Kuy Teav",
-      description:
-        "Kuy Teav is a Cambodian noodle soup made from pork or beef bones with rice noodles, topped with fried garlic, scallions, and meat.",
-      ingredients: ["Rice Noodles", "Pork/Beef Broth", "Garlic", "Scallions"],
-      image: kuyteavImage,
-    },
+
     {
       name: "Lap Khmer",
       description:
