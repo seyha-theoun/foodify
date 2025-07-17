@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiShoppingCart, FiMenu, FiX } from "react-icons/fi";
 import { CartContext } from "../context/CartContext";
-
+import ImageLogo from "../assets/photo/logo-no-bg.png"; // Adjust the path as necessary
 function Navbar() {
   const { cartItems } = useContext(CartContext);
   const itemCount = cartItems.length;
@@ -14,14 +14,13 @@ function Navbar() {
 
   return (
     <nav className="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
           <Link
             to="/"
-            className="text-2xl font-bold text-indigo-600 hover:text-indigo-700 transition-colors"
+            className=" font-bold text-indigo-600 hover:text-indigo-700 transition-colors"
           >
-            YourLogo
+            <img src={ImageLogo} alt="LogoWebsite" className="h-18 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}

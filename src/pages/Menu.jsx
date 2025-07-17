@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import { fetchAllFoods } from "../api/FoodApi";
 import { CartContext } from "../context/CartContext";
 import khmerFoodData from "../data/khmerFoods.json";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 function Menu() {
   const [foods, setFoods] = useState([]);
@@ -9,9 +11,13 @@ function Menu() {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [error, setError] = useState(null);
-  const [selectedRecipe, setSelectedRecipe] = useState(null); // ✅ Added
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
 
   const { addToCart } = useContext(CartContext);
+
+  useEffect(() => {
+    AOS.init({ duration: 800, once: true }); // ✅ Init AOS
+  }, []);
 
   useEffect(() => {
     async function getFoods() {
@@ -68,10 +74,12 @@ function Menu() {
 
   return (
     <div className="p-4 relative">
-      <h1 className="text-2xl font-bold mb-4">🍲 Food Menu</h1>
+      <h1 className="text-2xl font-bold mb-4" data-aos="fade-down">
+        🍲 Food Menu
+      </h1>
 
       {/* Filter buttons */}
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-2 mb-6" data-aos="fade-up">
         {["All", "Khmer", "European"].map((cat) => (
           <button
             key={cat}
@@ -88,16 +96,22 @@ function Menu() {
       </div>
 
       {/* Loading/Error */}
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-600">Error: {error}</p>}
+      {loading && <p data-aos="fade-in">Loading...</p>}
+      {error && (
+        <p className="text-red-600" data-aos="fade-in">
+          Error: {error}
+        </p>
+      )}
 
       {/* Food Grid */}
       {!loading && !error && filteredFoods.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {filteredFoods.map((food) => (
+          {filteredFoods.map((food, index) => (
             <div
               key={food.id}
               className="border p-4 rounded shadow flex flex-col"
+              data-aos="zoom-in"
+              data-aos-delay={index * 50}
             >
               {food.image ? (
                 <img
@@ -131,10 +145,14 @@ function Menu() {
         </div>
       ) : (
         !loading &&
-        !error && <p>No food data available for selected category.</p>
+        !error && (
+          <p data-aos="fade-up">
+            No food data available for selected category.
+          </p>
+        )
       )}
 
-      {/* ✅ Recipe Modal */}
+      {/* Recipe Modal */}
       {selectedRecipe && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-lg relative">
