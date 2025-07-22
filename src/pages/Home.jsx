@@ -3,6 +3,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { fetchAllFoods } from "../api/FoodApi";
 import FoodCard from "./KhmerFood";
+import Footer from "../components/Footer";
 
 function Home() {
   const [foods, setFoods] = useState([]);
@@ -102,18 +103,20 @@ function Home() {
           <div className="md:w-1/2 flex justify-center" data-aos="zoom-in">
             <div className="relative w-full max-w-md">
               <img
-                src="https://images.unsplash.com/photo-1551504734-5ee1c4a1479b"
+                src="https://changkrankhmer.opte.io/wp-content/uploads/sites/3113/2023/04/amok-fish-recipe.jpg"
                 alt="Cambodian food"
                 className="rounded-xl shadow-2xl w-full h-auto transform hover:rotate-1 transition duration-500"
               />
-              <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-xl shadow-lg hidden md:block animate-bounce">
+              <div className="absolute -bottom-6 -right-6  bg-white p-4 rounded-xl shadow-lg hidden md:block animate-bounce">
                 <div className="flex items-center">
                   <div className="bg-green-100 p-3 rounded-full mr-3">
                     <span className="text-2xl">💸</span>
                   </div>
                   <div>
-                    <p className="font-bold text-gray-800">Special Offer</p>
-                    <p className="text-sm text-gray-600">20% off first order</p>
+                    <p className="font-bold text-amber-600">Special Offer</p>
+                    <p className="text-sm text-amber-600">
+                      20% off first order
+                    </p>
                   </div>
                 </div>
               </div>
@@ -310,34 +313,8 @@ function Home() {
           </div>
         </div>
       </section>
-
-      {/* Call to Action */}
-      <section
-        className="py-16 bg-gradient-to-r from-amber-500 to-amber-600"
-        data-aos="zoom-in"
-      >
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            Ready to Experience Authentic Cambodian Flavors?
-          </h2>
-          <p className="text-xl text-amber-100 mb-8 max-w-2xl mx-auto">
-            🥳 Order now and get 20% off your first meal with code{" "}
-            <strong>CAMBODIA20</strong>
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="../menu">
-              <button className="bg-white hover:bg-gray-100 text-amber-600 font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300 transform hover:scale-105">
-                🛍️ Order Now
-              </button>
-            </a>
-            <a href="../Contact">
-              <button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-amber-600 font-semibold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105">
-                📞 Contact Us
-              </button>
-            </a>
-          </div>
-        </div>
-      </section>
+              <Footer/>
+    
     </>
   );
 }

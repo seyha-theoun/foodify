@@ -12,11 +12,13 @@ function Menu() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [error, setError] = useState(null);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [showAddToCartFeedback, setShowAddToCartFeedback] = useState(false);
+  const [addedItemName, setAddedItemName] = useState("");
 
   const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
-    AOS.init({ duration: 800, once: true }); // ✅ Init AOS
+    AOS.init({ duration: 800, once: true });
   }, []);
 
   useEffect(() => {
@@ -58,6 +60,17 @@ function Menu() {
     getFoods();
   }, []);
 
+  const handleAddToCart = (food) => {
+    addToCart(food);
+    setAddedItemName(food.name);
+    setShowAddToCartFeedback(true);
+
+    // Hide the feedback after 2 seconds
+    setTimeout(() => {
+      setShowAddToCartFeedback(false);
+    }, 500);
+  };
+
   const handleFilter = (category) => {
     setSelectedCategory(category);
     if (category === "All") {
@@ -74,6 +87,16 @@ function Menu() {
 
   return (
     <div className="p-4 relative">
+      {/* Add to Cart Feedback Overlay */}
+      {showAddToCartFeedback && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-sm w-full text-center shadow-lg">
+            <p className="text-xl font-semibold mb-2">✅ Added to Cart!</p>
+            <p className="text-lg">{addedItemName}</p>
+          </div>
+        </div>
+      )}
+
       <h1 className="text-2xl font-bold mb-4" data-aos="fade-down">
         🍲 Food Menu
       </h1>
@@ -129,7 +152,7 @@ function Menu() {
                 Price: {food.price ? `$${food.price.toFixed(2)}` : "N/A"}
               </p>
               <button
-                onClick={() => addToCart(food)}
+                onClick={() => handleAddToCart(food)}
                 className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
               >
                 Add to Cart
