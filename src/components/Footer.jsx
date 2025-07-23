@@ -1,4 +1,5 @@
-import React from 'react'
+import React from "react";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
@@ -17,16 +18,16 @@ function Footer() {
             <strong>CAMBODIA20</strong>
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="../menu">
+            <Link to="/menu">
               <button className="bg-white hover:bg-gray-100 text-amber-600 font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300 transform hover:scale-105">
                 🛍️ Order Now
               </button>
-            </a>
-            <a href="../Contact">
+            </Link>
+            <Link to="/contact">
               <button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-amber-600 font-semibold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105">
                 📞 Contact Us
               </button>
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -34,4 +35,4 @@ function Footer() {
   );
 }
 
-export default Footer
+export default Footer;

@@ -4,6 +4,7 @@ import "aos/dist/aos.css";
 import { fetchAllFoods } from "../api/FoodApi";
 import FoodCard from "./KhmerFood";
 import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
 
 function Home() {
   const [foods, setFoods] = useState([]);
@@ -58,11 +59,11 @@ function Home() {
               dishes made from traditional recipes.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <a href="../menu">
+              <Link to="/menu">
                 <button className="bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-300 transform hover:scale-105 flex items-center">
                   <span className="mr-2">🛒</span> Order Now
                 </button>
-              </a>
+              </Link>
               <button className="border-2 border-amber-500 text-amber-600 hover:bg-amber-50 font-semibold py-3 px-6 rounded-lg transition duration-300 transform hover:scale-105 flex items-center">
                 <span className="mr-2">📖</span> Explore Recipes
               </button>
@@ -313,8 +314,7 @@ function Home() {
           </div>
         </div>
       </section>
-              <Footer/>
-    
+      <Footer />
     </>
   );
 }
