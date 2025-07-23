@@ -9,6 +9,7 @@ import Cart from "./pages/Cart";
 import Login from "./auth/Login";
 import Sigup from "./auth/Sigup";
 import Checkout from "./pages/Checkout"; // Add this import
+import NotFoundPage from "./pages/NotFoundPage"; // Import NotFoundPage
 // import Footer from "./components/Footer";
 
 function App() {
