@@ -26,6 +26,7 @@ function App() {
           {/* Use Checkout here */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Sigup />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </CartProvider>
       {/* <Footer /> */}
