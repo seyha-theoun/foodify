@@ -14,6 +14,7 @@ function Menu() {
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [showAddToCartFeedback, setShowAddToCartFeedback] = useState(false);
   const [addedItemName, setAddedItemName] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { addToCart } = useContext(CartContext);
 
@@ -85,6 +86,22 @@ function Menu() {
     }
   };
 
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+    if (term === "") {
+      setFilteredFoods(foods);
+    } else {
+      const filtered = foods.filter((food) =>
+        food.name.toLowerCase().includes(term.toLowerCase())
+      );
+      setFilteredFoods(filtered);
+    }
+  };
+
+  const displayedFoods = filteredFoods.filter((food) =>
+    food.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="p-4 relative">
       {/* Add to Cart Feedback Overlay */}
@@ -100,24 +117,36 @@ function Menu() {
       <h1 className="text-2xl font-bold mb-4" data-aos="fade-down">
         🍲 Food Menu
       </h1>
-
-      {/* Filter buttons */}
-      <div className="flex gap-2 mb-6" data-aos="fade-up">
-        {["All", "Khmer", "European"].map((cat) => (
-          <button
-            key={cat}
-            onClick={() => handleFilter(cat)}
-            className={`px-4 py-2 rounded ${
-              selectedCategory === cat
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-800"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
+      <section className="mb-2">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          {/* Filter buttons */}
+          <div className="flex gap-2" data-aos="fade-up">
+            {["All", "Khmer", "European"].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => handleFilter(cat)}
+                className={`px-4 py-2 rounded ${
+                  selectedCategory === cat
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-200 text-gray-800"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+          {/* Search Bar */}
+          <div className="flex items-center" data-aos="fade-up">
+            <input
+              type="text"
+              placeholder="Search food..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded w-full max-w-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+      </section>
       {/* Loading/Error */}
       {loading && <p data-aos="fade-in">Loading...</p>}
       {error && (
@@ -127,9 +156,9 @@ function Menu() {
       )}
 
       {/* Food Grid */}
-      {!loading && !error && filteredFoods.length > 0 ? (
+      {!loading && !error && displayedFoods.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {filteredFoods.map((food, index) => (
+          {displayedFoods.map((food, index) => (
             <div
               key={food.id}
               className="border p-4 rounded shadow flex flex-col"
@@ -170,7 +199,7 @@ function Menu() {
         !loading &&
         !error && (
           <p data-aos="fade-up">
-            No food data available for selected category.
+            No food data available for selected category or search.
           </p>
         )
       )}
