@@ -8,6 +8,7 @@ import Contact from "./pages/Contact";
 import Cart from "./pages/Cart";
 import Login from "./auth/Login";
 import Sigup from "./auth/Sigup";
+import Checkout from "./pages/Checkout"; // Add this import
 // import Footer from "./components/Footer";
 
 function App() {
@@ -21,6 +22,8 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />{" "}
+          {/* Use Checkout here */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Sigup />} />
         </Routes>
