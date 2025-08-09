@@ -2,10 +2,12 @@ import React, { useContext, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FiShoppingCart, FiMenu, FiX } from "react-icons/fi";
 import { CartContext } from "../context/CartContext";
+import { AuthContext } from "../context/AuthContext"; // import AuthContext here
 import ImageLogo from "../assets/photo/logo-no-bg.png";
 
 export default function Navbar() {
   const { cartItems } = useContext(CartContext);
+  const { user, logout } = useContext(AuthContext); // get user and logout
   const itemCount = cartItems.length;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -14,7 +16,6 @@ export default function Navbar() {
     setMobileMenuOpen((prev) => !prev);
   };
 
-  // Function to check if a link is active
   const isActive = (path) => {
     if (path === "/") {
       return location.pathname === path;
@@ -66,22 +67,38 @@ export default function Navbar() {
               );
             })}
 
-            {/* Updated Login & Signup */}
+            {/* User Info / Login & Signup */}
             <div className="flex items-center space-x-4 ml-4">
-              <Link
-                to="/login"
-                className={`text-gray-700 font-medium hover:text-indigo-600 transition-colors px-4 py-2 rounded-full hover:bg-gray-50 ${
-                  isActive("/login") ? "text-indigo-600 bg-gray-50" : ""
-                }`}
-              >
-                Login
-              </Link>
-              <Link
-                to="/signup"
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium px-6 py-2 rounded-full shadow hover:shadow-md hover:opacity-90 transition-all"
-              >
-                Sign up
-              </Link>
+              {user ? (
+                <>
+                  <span className="text-gray-700 font-medium">
+                    Hello, {user.email}
+                  </span>
+                  <button
+                    onClick={logout}
+                    className="text-red-500 font-medium hover:underline"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className={`text-gray-700 font-medium hover:text-indigo-600 transition-colors px-4 py-2 rounded-full hover:bg-gray-50 ${
+                      isActive("/login") ? "text-indigo-600 bg-gray-50" : ""
+                    }`}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium px-6 py-2 rounded-full shadow hover:shadow-md hover:opacity-90 transition-all"
+                  >
+                    Sign up
+                  </Link>
+                </>
+              )}
 
               {/* Cart */}
               <Link
@@ -155,24 +172,38 @@ export default function Navbar() {
           })}
 
           <div className="pt-2 space-y-3 border-t border-gray-100 mt-2">
-            <Link
-              to="/login"
-              className={`block w-full text-center font-medium transition-colors px-4 py-3 rounded-lg hover:bg-gray-50 ${
-                isActive("/login")
-                  ? "text-indigo-600 bg-gray-50"
-                  : "text-gray-700 hover:text-indigo-600"
-              }`}
-              onClick={toggleMobileMenu}
-            >
-              Login
-            </Link>
-            <Link
-              to="/signup"
-              className="block w-full text-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium px-6 py-3 rounded-lg shadow hover:opacity-90 transition-all"
-              onClick={toggleMobileMenu}
-            >
-              Sign up
-            </Link>
+            {user ? (
+              <button
+                onClick={() => {
+                  logout();
+                  toggleMobileMenu();
+                }}
+                className="block w-full text-center text-red-500 font-medium px-4 py-3 rounded-lg hover:bg-gray-50"
+              >
+                Logout
+              </button>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className={`block w-full text-center font-medium transition-colors px-4 py-3 rounded-lg hover:bg-gray-50 ${
+                    isActive("/login")
+                      ? "text-indigo-600 bg-gray-50"
+                      : "text-gray-700 hover:text-indigo-600"
+                  }`}
+                  onClick={toggleMobileMenu}
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className="block w-full text-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium px-6 py-3 rounded-lg shadow hover:opacity-90 transition-all"
+                  onClick={toggleMobileMenu}
+                >
+                  Sign up
+                </Link>
+              </>
+            )}
           </div>
 
           <Link
