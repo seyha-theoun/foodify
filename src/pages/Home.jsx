@@ -5,6 +5,7 @@ import { fetchAllFoods } from "../api/FoodApi";
 import FoodCard from "./KhmerFood";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
+import coffee from "../assets/photo/coffee1.png"
 
 function Home() {
   const [foods, setFoods] = useState([]);
@@ -104,7 +105,7 @@ function Home() {
           <div className="md:w-1/2 flex justify-center" data-aos="zoom-in">
             <div className="relative w-full max-w-md">
               <img
-                src="https://changkrankhmer.opte.io/wp-content/uploads/sites/3113/2023/04/amok-fish-recipe.jpg"
+                src="https://png.pngtree.com/png-clipart/20240810/original/pngtree-flying-cup-of-coffee-with-splash-and-png-image_15739217.png"
                 alt="Cambodian food"
                 className="rounded-xl shadow-2xl w-full h-auto transform hover:rotate-1 transition duration-500"
               />
@@ -167,7 +168,7 @@ function Home() {
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 mb-8 md:mb-0 md:pr-8">
               <img
-                src="https://images.unsplash.com/photo-1585032226651-759b368d7246"
+                src="https://d2zyb4ugwufqpc.cloudfront.net/media/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/c/o/coffeecrop.jpg"
                 alt="Cambodian street food"
                 className="rounded-xl shadow-lg w-full h-auto"
               />
@@ -192,121 +193,146 @@ function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 bg-gray-50" data-aos="fade-up">
+      {/* Coffee Features Section */}
+      <section
+        className="py-20 bg-gradient-to-b from-[#f9f5f0] to-[#f3ede4]"
+        data-aos="fade-up"
+      >
         <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-              Why <span className="text-amber-600">Choose</span> Us
+          {/* Section Header */}
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Why Our <span className="text-amber-700">Coffee</span> Stands Out
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              We're committed to bringing you the best Cambodian dining
-              experience
+              Crafted with passion, roasted to perfection, and brewed for true
+              coffee lovers
             </p>
           </div>
 
+          {/* Feature Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Feature 1 */}
             <div
-              className="bg-white p-8 rounded-xl shadow-md text-center hover:shadow-lg transition duration-300"
+              className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition duration-300 text-center"
               data-aos="zoom-in"
             >
-              <div className="text-4xl mb-4">⚡</div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">
-                Fast Delivery
+              <div className="mx-auto mb-6 w-16 h-16 flex items-center justify-center rounded-full bg-amber-100 text-3xl">
+                ☕
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                Specialty Beans
               </h3>
               <p className="text-gray-600">
-                Delivered in under 30 minutes or it's free!
+                Premium Arabica beans sourced from high-altitude farms for rich
+                aroma and flavor.
               </p>
             </div>
 
+            {/* Feature 2 */}
             <div
-              className="bg-white p-8 rounded-xl shadow-md text-center hover:shadow-lg transition duration-300"
+              className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition duration-300 text-center"
               data-aos="zoom-in"
             >
-              <div className="text-4xl mb-4">🍽️</div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">
-                Premium Quality
+              <div className="mx-auto mb-6 w-16 h-16 flex items-center justify-center rounded-full bg-amber-100 text-3xl">
+                🔥
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                Fresh Roasted Daily
               </h3>
               <p className="text-gray-600">
-                Fresh ingredients prepared by skilled chefs
+                Small-batch roasted every day to ensure maximum freshness and
+                bold taste.
               </p>
             </div>
 
+            {/* Feature 3 */}
             <div
-              className="bg-white p-8 rounded-xl shadow-md text-center hover:shadow-lg transition duration-300"
+              className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition duration-300 text-center"
               data-aos="zoom-in"
             >
-              <div className="text-4xl mb-4">🌾</div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">
-                Local Sourcing
+              <div className="mx-auto mb-6 w-16 h-16 flex items-center justify-center rounded-full bg-amber-100 text-3xl">
+                🫘
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                Ethically Sourced
               </h3>
               <p className="text-gray-600">
-                90% of ingredients sourced locally in Cambodia
+                Direct-trade beans supporting local farmers and sustainable
+                coffee farming.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-16 bg-white" data-aos="fade-up">
+      {/* Coffee Testimonials Section */}
+      <section className="py-20 bg-[#fdf6f0]" data-aos="fade-up">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-              What Our <span className="text-amber-600">Customers</span> Say
+          {/* Section Header */}
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              What Our <span className="text-amber-700">Coffee Lovers</span> Say
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Don't just take our word for it...
+              Hear from customers who’ve savored our freshly brewed creations
             </p>
           </div>
 
+          {/* Testimonials Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                quote: "The Amok Trey was absolutely divine!",
-                name: "Sophia R.",
-                role: "Food Blogger",
+                quote: "The Cappuccino was smooth and perfectly balanced!",
+                name: "Emma L.",
+                role: "Coffee Enthusiast",
                 rating: 5,
               },
               {
-                quote: "Best Khmer food I've had outside Cambodia.",
-                name: "David K.",
-                role: "Travel Enthusiast",
+                quote: "I can’t start my day without their Cold Brew!",
+                name: "James R.",
+                role: "Daily Customer",
                 rating: 5,
               },
               {
-                quote: "Their Nom Banh Chok took me right back to Siem Reap!",
-                name: "Lina M.",
-                role: "Cambodian Expat",
+                quote:
+                  "Rich aroma, bold flavor – simply the best coffee in town.",
+                name: "Sophia K.",
+                role: "Barista Blogger",
                 rating: 5,
               },
             ].map((testimonial, index) => (
               <div
                 key={index}
-                className="bg-gray-50 p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300"
+                className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition duration-300"
                 data-aos="zoom-in"
               >
-                <div className="flex mb-4">
+                {/* Star Rating */}
+                <div className="flex mb-4 justify-center">
                   {Array(testimonial.rating)
                     .fill("⭐")
                     .map((star, i) => (
-                      <span key={i} className="text-xl text-amber-500">
+                      <span key={i} className="text-amber-500 text-xl">
                         {star}
                       </span>
                     ))}
                 </div>
-                <p className="text-gray-600 italic mb-6">
+
+                {/* Quote */}
+                <p className="text-gray-700 italic mb-6 text-center">
                   "{testimonial.quote}"
                 </p>
-                <div className="flex items-center">
-                  <div className="text-2xl bg-amber-100 p-2 rounded-full mr-4">
+
+                {/* Customer Info */}
+                <div className="flex items-center justify-center gap-4">
+                  <div className="bg-amber-100 p-3 rounded-full text-2xl">
                     👤
                   </div>
-                  <div>
-                    <p className="font-bold text-gray-800">
+                  <div className="text-center">
+                    <p className="font-semibold text-gray-900">
                       {testimonial.name}
                     </p>
-                    <p className="text-sm text-gray-600">{testimonial.role}</p>
+                    <p className="text-sm text-gray-500">{testimonial.role}</p>
                   </div>
                 </div>
               </div>
@@ -314,6 +340,7 @@ function Home() {
           </div>
         </div>
       </section>
+
       <Footer />
     </>
   );

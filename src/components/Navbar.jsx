@@ -35,10 +35,10 @@ export default function Navbar() {
             <img
               src={ImageLogo}
               alt="LogoWebsite"
-              className="h-20 w-auto transition-transform hover:scale-105"
+              className="h-16 w-auto transition-transform hover:scale-105"
             />
             <span className="ml-2 text-xl font-semibold hidden sm:block">
-              FOODIE
+              COFFEE HUB
             </span>
           </Link>
 
