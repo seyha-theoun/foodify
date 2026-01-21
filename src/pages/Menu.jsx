@@ -88,187 +88,275 @@ function Menu() {
   );
 
   /* ---------------- RENDER ---------------- */
-  return (
-    <div className="p-4 md:p-6 max-w-7xl mx-auto relative">
-      {/* ADD TO CART FEEDBACK */}
-      {showAddToCartFeedback && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-6 w-80 text-center shadow-xl animate-scale-in">
-            <p className="text-xl font-bold mb-2">✅ Added to Cart</p>
-            <p className="text-gray-700">{addedItemName}</p>
+return (
+  <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
+    {/* ADD TO CART TOAST */}
+    {showAddToCartFeedback && (
+      <div className="fixed top-5 left-1/2 -translate-x-1/2 z-[60]">
+        <div className="flex items-center gap-3 rounded-2xl border border-gray-200 bg-white/90 backdrop-blur-xl px-4 py-3 shadow-xl animate-scale-in">
+          <span className="text-xl">✅</span>
+          <div className="leading-tight">
+            <p className="font-bold text-gray-900">Added to cart</p>
+            <p className="text-sm text-gray-600">{addedItemName}</p>
           </div>
         </div>
-      )}
+      </div>
+    )}
 
-      {/* TITLE */}
-      <h1 className="text-3xl font-extrabold mb-6" data-aos="fade-down">
-        ☕ COFFEE MENU
-      </h1>
+    <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-10">
+      {/* HEADER */}
+      <div
+        className="relative overflow-hidden rounded-3xl border border-gray-200 bg-white/70 backdrop-blur-xl shadow-sm p-6 md:p-10"
+        data-aos="fade-down"
+      >
+        <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-indigo-500/10 blur-3xl" />
+        <div className="absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-purple-500/10 blur-3xl" />
 
-      {/* FILTER & SEARCH */}
-      <section className="mb-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div className="flex gap-2" data-aos="fade-up">
-            {["All", "HOT COFFEE", "ICED COFFEE"].map((cat) => (
+        <div className="relative flex flex-col md:flex-row md:items-end md:justify-between gap-5">
+          <div>
+            <p className="inline-flex items-center gap-2 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1 text-xs font-bold">
+              ☕ COFFEE HUB • MENU
+            </p>
+            <h1 className="mt-3 text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight">
+              Discover your next{" "}
+              <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                favorite coffee
+              </span>
+            </h1>
+            <p className="mt-2 text-gray-600 max-w-xl">
+              Hot, iced, and premium blends — filter fast and add to cart in one
+              click.
+            </p>
+          </div>
+
+          {/* SEARCH */}
+          <div className="w-full md:w-[360px]" data-aos="fade-up">
+            <div className="flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-indigo-200">
+              <span className="text-gray-400">🔎</span>
+              <input
+                type="text"
+                placeholder="Search coffee..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full bg-transparent outline-none text-sm text-gray-800 placeholder:text-gray-400"
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="text-xs font-semibold text-gray-500 hover:text-gray-800"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* FILTERS */}
+        <div className="relative mt-6 flex flex-wrap gap-2" data-aos="fade-up">
+          {["All", "HOT COFFEE", "ICED COFFEE"].map((cat) => {
+            const active = selectedCategory === cat;
+            return (
               <button
                 key={cat}
                 onClick={() => handleFilter(cat)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition
+                className={`px-4 py-2 rounded-full text-sm font-semibold transition
                   ${
-                    selectedCategory === cat
-                      ? "bg-blue-600 text-white shadow"
-                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                    active
+                      ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-200"
+                      : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-50"
                   }`}
               >
                 {cat}
               </button>
-            ))}
-          </div>
-
-          <input
-            type="text"
-            placeholder="🔍 Search coffee..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="px-4 py-2 border rounded-full w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            data-aos="fade-up"
-          />
+            );
+          })}
         </div>
-      </section>
+      </div>
 
       {/* STATES */}
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-600">{error}</p>}
-
-      {/* FOOD GRID */}
-      {!loading && !error && displayedFoods.length > 0 ? (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {displayedFoods.map((food, index) => (
+      {loading && (
+        <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-6">
+          {Array.from({ length: 8 }).map((_, i) => (
             <div
-              key={food.id}
-              className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 flex flex-col"
-              data-aos="zoom-in"
-              data-aos-delay={index * 50}
+              key={i}
+              className="rounded-3xl border border-gray-200 bg-white p-4 shadow-sm"
             >
-              {/* IMAGE */}
-              <div className="relative overflow-hidden">
-                {food.image ? (
-                  <img
-                    src={food.image}
-                    alt={food.name}
-                    className="h-40 w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                ) : (
-                  <div className="h-40 bg-gray-200 flex items-center justify-center text-gray-500">
-                    No Image
-                  </div>
-                )}
-
-                {/* CATEGORY BADGE */}
-                <span className="absolute top-3 left-3 bg-black/70 text-white text-xs px-3 py-1 rounded-full">
-                  {food.category}
-                </span>
-              </div>
-
-              {/* CONTENT */}
-              <div className="p-4 flex flex-col flex-grow">
-                <h2 className="text-lg font-bold text-gray-800 mb-1 line-clamp-1">
-                  {food.name}
-                </h2>
-
-                <p className="text-sm text-gray-500 mb-3">
-                  Premium coffee taste ☕
-                </p>
-
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xl font-extrabold text-blue-600">
-                    {food.price ? `$${food.price.toFixed(2)}` : "N/A"}
-                  </span>
-
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-                    Available
-                  </span>
-                </div>
-
-                <button
-                  onClick={() => handleAddToCart(food)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl transition mb-2"
-                >
-                  🛒 Add to Cart
-                </button>
-
-                <button
-                  onClick={() => setSelectedRecipe(food)}
-                  className="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white py-2 rounded-xl transition"
-                >
-                  📖 View Recipe
-                </button>
-              </div>
+              <div className="h-40 rounded-2xl bg-gray-100 animate-pulse" />
+              <div className="mt-4 h-4 w-3/4 rounded bg-gray-100 animate-pulse" />
+              <div className="mt-2 h-3 w-1/2 rounded bg-gray-100 animate-pulse" />
+              <div className="mt-4 h-10 rounded-2xl bg-gray-100 animate-pulse" />
             </div>
           ))}
         </div>
-      ) : (
-        !loading &&
-        !error && (
-          <p className="text-gray-600">
-            No food found for selected category or search.
-          </p>
-        )
       )}
 
-      {/* RECIPE MODAL */}
-      {selectedRecipe && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-6 max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-xl">
-            <h2 className="text-2xl font-bold mb-4">{selectedRecipe.name}</h2>
+      {error && (
+        <div className="mt-8 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-700">
+          {error}
+        </div>
+      )}
 
-            {selectedRecipe.image && (
-              <img
-                src={selectedRecipe.image}
-                alt={selectedRecipe.name}
-                className="w-full h-64 object-cover rounded-lg mb-4"
-              />
-            )}
+      {/* GRID */}
+      {!loading && !error && (
+        <>
+          {displayedFoods.length > 0 ? (
+            <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-6">
+              {displayedFoods.map((food, index) => (
+                <div
+                  key={food.id}
+                  className="group rounded-3xl border border-gray-200 bg-white shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                  data-aos="zoom-in"
+                  data-aos-delay={index * 50}
+                >
+                  {/* IMAGE */}
+                  <div className="relative overflow-hidden">
+                    {food.image ? (
+                      <img
+                        src={food.image}
+                        alt={food.name}
+                        className="h-40 w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    ) : (
+                      <div className="h-40 bg-gray-100 flex items-center justify-center text-gray-500">
+                        No Image
+                      </div>
+                    )}
 
-            <p className="mb-2">
-              <strong>Category:</strong> {selectedRecipe.category}
-            </p>
+                    {/* badge */}
+                    <span className="absolute top-3 left-3 rounded-full bg-black/60 text-white text-[11px] px-3 py-1 backdrop-blur">
+                      {food.category}
+                    </span>
 
-            <p className="mb-3">
-              <strong>Price:</strong>{" "}
-              {selectedRecipe.price
-                ? `$${selectedRecipe.price.toFixed(2)}`
-                : "N/A"}
-            </p>
+                    {/* subtle gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition" />
+                  </div>
 
-            {selectedRecipe.strInstructions && (
-              <p className="text-sm text-gray-700 whitespace-pre-line">
-                <strong>Instructions:</strong> {selectedRecipe.strInstructions}
+                  {/* CONTENT */}
+                  <div className="p-4 flex flex-col">
+                    <h2 className="text-[15px] md:text-base font-extrabold text-gray-900 line-clamp-1">
+                      {food.name}
+                    </h2>
+                    <p className="mt-1 text-xs text-gray-500">
+                      Premium coffee taste ☕
+                    </p>
+
+                    <div className="mt-4 flex items-center justify-between">
+                      <span className="text-lg font-extrabold text-indigo-700">
+                        {food.price ? `$${food.price.toFixed(2)}` : "N/A"}
+                      </span>
+
+                      <span className="text-[11px] rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 px-2 py-1 font-bold">
+                        Available
+                      </span>
+                    </div>
+
+                    <div className="mt-4 grid gap-2">
+                      <button
+                        onClick={() => handleAddToCart(food)}
+                        className="rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2.5 text-sm font-semibold shadow-sm hover:opacity-95 transition"
+                      >
+                        🛒 Add to Cart
+                      </button>
+
+                      <button
+                        onClick={() => setSelectedRecipe(food)}
+                        className="rounded-2xl border border-gray-200 bg-white py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition"
+                      >
+                        📖 View Recipe
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="mt-10 text-center">
+              <p className="text-gray-600">
+                No coffee found for selected category or search.
               </p>
-            )}
+            </div>
+          )}
+        </>
+      )}
 
-            {selectedRecipe.strYoutube && (
-              <a
-                href={selectedRecipe.strYoutube}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 underline block mt-3"
+      {/* MODAL */}
+      {selectedRecipe && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setSelectedRecipe(null)}
+          />
+          <div className="relative w-full max-w-2xl rounded-3xl border border-gray-200 bg-white shadow-2xl overflow-hidden">
+            {/* header */}
+            <div className="p-5 md:p-6 border-b border-gray-100 flex items-start justify-between gap-3">
+              <div>
+                <h2 className="text-xl md:text-2xl font-extrabold text-gray-900">
+                  {selectedRecipe.name}
+                </h2>
+                <p className="text-sm text-gray-600 mt-1">
+                  {selectedRecipe.category} •{" "}
+                  {selectedRecipe.price
+                    ? `$${selectedRecipe.price.toFixed(2)}`
+                    : "N/A"}
+                </p>
+              </div>
+              <button
+                onClick={() => setSelectedRecipe(null)}
+                className="rounded-xl border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
               >
-                📺 Watch on YouTube
-              </a>
-            )}
+                ✕
+              </button>
+            </div>
 
-            <button
-              onClick={() => setSelectedRecipe(null)}
-              className="mt-5 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-xl transition w-full"
-            >
-              Close
-            </button>
+            {/* body */}
+            <div className="p-5 md:p-6 max-h-[70vh] overflow-y-auto">
+              {selectedRecipe.image && (
+                <img
+                  src={selectedRecipe.image}
+                  alt={selectedRecipe.name}
+                  className="w-full h-64 object-cover rounded-2xl mb-4"
+                />
+              )}
+
+              {selectedRecipe.strInstructions ? (
+                <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4">
+                  <p className="text-sm font-bold text-gray-900 mb-2">
+                    Instructions
+                  </p>
+                  <p className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
+                    {selectedRecipe.strInstructions}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-sm text-gray-600">No instructions found.</p>
+              )}
+
+              {selectedRecipe.strYoutube && (
+                <a
+                  href={selectedRecipe.strYoutube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center justify-center w-full rounded-2xl bg-red-500 hover:bg-red-600 text-white py-3 text-sm font-semibold transition"
+                >
+                  📺 Watch on YouTube
+                </a>
+              )}
+
+              <button
+                onClick={() => setSelectedRecipe(null)}
+                className="mt-3 w-full rounded-2xl border border-gray-200 bg-white py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
     </div>
-  );
+  </div>
+);
+
 }
 
 export default Menu;

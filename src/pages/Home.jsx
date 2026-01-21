@@ -2,26 +2,27 @@ import React, { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { fetchAllFoods } from "../api/FoodApi";
-import FoodCard from "./KhmerFood";
+import FoodCard from "../components/FoodCard";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
-import coffee from "../assets/photo/coffee1.png"
+import coffee from "../assets/photo/coffee1.png";
 
 function Home() {
   const [foods, setFoods] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    AOS.init({ duration: 1000 });
+    AOS.init({ duration: 1000, once: true });
 
     async function getFoods() {
       try {
         const data = await fetchAllFoods();
-        setFoods(data.slice(0, 4));
+        setFoods((data || []).slice(0, 4));
       } catch (error) {
         console.error("Error fetching foods:", error);
       } finally {
         setLoading(false);
+        setTimeout(() => AOS.refresh(), 200);
       }
     }
 
@@ -59,12 +60,14 @@ function Home() {
               Experience the rich flavors of Cambodia with our handcrafted
               dishes made from traditional recipes.
             </p>
+
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/menu">
                 <button className="bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-300 transform hover:scale-105 flex items-center">
                   <span className="mr-2">🛒</span> Order Now
                 </button>
               </Link>
+
               <button className="border-2 border-amber-500 text-amber-600 hover:bg-amber-50 font-semibold py-3 px-6 rounded-lg transition duration-300 transform hover:scale-105 flex items-center">
                 <span className="mr-2">📖</span> Explore Recipes
               </button>
@@ -93,6 +96,7 @@ function Home() {
                   😊 500+ Happy Customers
                 </span>
               </div>
+
               <div className="flex items-center">
                 <span className="text-xl text-amber-500 mr-1">⭐</span>
                 <span className="text-sm text-gray-600">
@@ -105,11 +109,12 @@ function Home() {
           <div className="md:w-1/2 flex justify-center" data-aos="zoom-in">
             <div className="relative w-full max-w-md">
               <img
-                src="https://png.pngtree.com/png-clipart/20240810/original/pngtree-flying-cup-of-coffee-with-splash-and-png-image_15739217.png"
-                alt="Cambodian food"
+                src={coffee}
+                alt="Coffee"
                 className="rounded-xl shadow-2xl w-full h-auto transform hover:rotate-1 transition duration-500"
               />
-              <div className="absolute -bottom-6 -right-6  bg-white p-4 rounded-xl shadow-lg hidden md:block animate-bounce">
+
+              <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-xl shadow-lg hidden md:block animate-bounce">
                 <div className="flex items-center">
                   <div className="bg-green-100 p-3 rounded-full mr-3">
                     <span className="text-2xl">💸</span>
@@ -145,19 +150,27 @@ function Home() {
               <div className="flex justify-center items-center py-12">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500"></div>
               </div>
+            ) : foods.length === 0 ? (
+              <div className="text-center text-gray-500 py-10">
+                No foods found.
+              </div>
             ) : (
-              <div>
-                <FoodCard food={foods[0]} key={foods[0]?.id || 0} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {foods.map((food) => (
+                  <div key={food?.id} data-aos="zoom-in">
+                    <FoodCard food={food} />
+                  </div>
+                ))}
               </div>
             )}
           </div>
 
           <div className="text-center mt-12">
-            <a href="../menu">
+            <Link to="/menu">
               <button className="bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300 transform hover:scale-105 flex items-center mx-auto">
                 <span className="mr-2">📋</span> View Full Menu
               </button>
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -199,7 +212,6 @@ function Home() {
         data-aos="fade-up"
       >
         <div className="container mx-auto px-6">
-          {/* Section Header */}
           <div className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Why Our <span className="text-amber-700">Coffee</span> Stands Out
@@ -210,66 +222,45 @@ function Home() {
             </p>
           </div>
 
-          {/* Feature Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <div
-              className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition duration-300 text-center"
-              data-aos="zoom-in"
-            >
-              <div className="mx-auto mb-6 w-16 h-16 flex items-center justify-center rounded-full bg-amber-100 text-3xl">
-                ☕
+            {[
+              {
+                icon: "☕",
+                title: "Specialty Beans",
+                desc: "Premium Arabica beans sourced from high-altitude farms for rich aroma and flavor.",
+              },
+              {
+                icon: "🔥",
+                title: "Fresh Roasted Daily",
+                desc: "Small-batch roasted every day to ensure maximum freshness and bold taste.",
+              },
+              {
+                icon: "🫘",
+                title: "Ethically Sourced",
+                desc: "Direct-trade beans supporting local farmers and sustainable coffee farming.",
+              },
+            ].map((f, i) => (
+              <div
+                key={i}
+                className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition duration-300 text-center"
+                data-aos="zoom-in"
+              >
+                <div className="mx-auto mb-6 w-16 h-16 flex items-center justify-center rounded-full bg-amber-100 text-3xl">
+                  {f.icon}
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  {f.title}
+                </h3>
+                <p className="text-gray-600">{f.desc}</p>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                Specialty Beans
-              </h3>
-              <p className="text-gray-600">
-                Premium Arabica beans sourced from high-altitude farms for rich
-                aroma and flavor.
-              </p>
-            </div>
-
-            {/* Feature 2 */}
-            <div
-              className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition duration-300 text-center"
-              data-aos="zoom-in"
-            >
-              <div className="mx-auto mb-6 w-16 h-16 flex items-center justify-center rounded-full bg-amber-100 text-3xl">
-                🔥
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                Fresh Roasted Daily
-              </h3>
-              <p className="text-gray-600">
-                Small-batch roasted every day to ensure maximum freshness and
-                bold taste.
-              </p>
-            </div>
-
-            {/* Feature 3 */}
-            <div
-              className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition duration-300 text-center"
-              data-aos="zoom-in"
-            >
-              <div className="mx-auto mb-6 w-16 h-16 flex items-center justify-center rounded-full bg-amber-100 text-3xl">
-                🫘
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                Ethically Sourced
-              </h3>
-              <p className="text-gray-600">
-                Direct-trade beans supporting local farmers and sustainable
-                coffee farming.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Coffee Testimonials Section */}
+      {/* Testimonials */}
       <section className="py-20 bg-[#fdf6f0]" data-aos="fade-up">
         <div className="container mx-auto px-6">
-          {/* Section Header */}
           <div className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               What Our <span className="text-amber-700">Coffee Lovers</span> Say
@@ -279,7 +270,6 @@ function Home() {
             </p>
           </div>
 
-          {/* Testimonials Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
@@ -301,15 +291,14 @@ function Home() {
                 role: "Barista Blogger",
                 rating: 5,
               },
-            ].map((testimonial, index) => (
+            ].map((t, index) => (
               <div
                 key={index}
                 className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition duration-300"
                 data-aos="zoom-in"
               >
-                {/* Star Rating */}
                 <div className="flex mb-4 justify-center">
-                  {Array(testimonial.rating)
+                  {Array(t.rating)
                     .fill("⭐")
                     .map((star, i) => (
                       <span key={i} className="text-amber-500 text-xl">
@@ -318,21 +307,17 @@ function Home() {
                     ))}
                 </div>
 
-                {/* Quote */}
                 <p className="text-gray-700 italic mb-6 text-center">
-                  "{testimonial.quote}"
+                  "{t.quote}"
                 </p>
 
-                {/* Customer Info */}
                 <div className="flex items-center justify-center gap-4">
                   <div className="bg-amber-100 p-3 rounded-full text-2xl">
                     👤
                   </div>
                   <div className="text-center">
-                    <p className="font-semibold text-gray-900">
-                      {testimonial.name}
-                    </p>
-                    <p className="text-sm text-gray-500">{testimonial.role}</p>
+                    <p className="font-semibold text-gray-900">{t.name}</p>
+                    <p className="text-sm text-gray-500">{t.role}</p>
                   </div>
                 </div>
               </div>

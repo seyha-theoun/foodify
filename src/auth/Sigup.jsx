@@ -7,82 +7,115 @@ export default function Signup() {
     email: "",
     password: "",
     confirmPassword: "",
+    agree: false,
   });
 
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: type === "checkbox" ? checked : value,
     }));
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
+
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.name.trim()) newErrors.name = "Full name is required";
     if (!formData.email.trim()) newErrors.email = "Email is required";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Please enter a valid email";
     }
+
     if (!formData.password) newErrors.password = "Password is required";
     else if (formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
     }
-    if (formData.password !== formData.confirmPassword) {
+
+    if (!formData.confirmPassword)
+      newErrors.confirmPassword = "Confirm your password";
+    else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
+
+    if (!formData.agree) newErrors.agree = "You must agree to Terms & Privacy";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log("Signup submitted:", formData);
-      // Add registration logic here
+    if (!validateForm()) return;
 
-      // Redirect to login page after successful registration
+    setLoading(true);
+    try {
+      // TODO: Add register logic (Firebase createUserWithEmailAndPassword)
+      console.log("Signup submitted:", formData);
+
       navigate("/login");
+    } finally {
+      setLoading(false);
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Create your account
-        </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Or{" "}
-          <Link
-            to="/login"
-            className="font-medium text-indigo-600 hover:text-indigo-500"
-          >
-            sign in to your existing account
-          </Link>
-        </p>
-      </div>
+  const inputBase =
+    "w-full bg-transparent outline-none text-sm text-gray-800 placeholder:text-gray-400";
+  const fieldWrap = (hasError) =>
+    `mt-2 flex items-center gap-2 rounded-2xl border bg-white px-4 py-3 shadow-sm transition
+     focus-within:ring-2 focus-within:ring-indigo-200
+     ${hasError ? "border-red-300" : "border-gray-200"}`;
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+  return (
+    <div className="min-h-screen relative flex items-center justify-center px-4 py-12 bg-gradient-to-b from-slate-50 via-white to-slate-50 overflow-hidden">
+      {/* soft blobs */}
+      <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-indigo-500/10 blur-3xl" />
+      <div className="absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-purple-500/10 blur-3xl" />
+
+      <div className="relative w-full max-w-md">
+        {/* Header */}
+        <div className="mb-6 text-center">
+          <p className="inline-flex items-center gap-2 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1 text-xs font-bold">
+            ✨ Create account
+          </p>
+          <h2 className="mt-3 text-3xl font-extrabold text-gray-900">
+            Join Coffee Hub
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="font-semibold text-indigo-700 hover:underline"
+            >
+              Sign in
+            </Link>
+          </p>
+        </div>
+
+        {/* Card */}
+        <div className="rounded-3xl border border-gray-200 bg-white/75 backdrop-blur-xl shadow-xl p-6 md:p-8">
+          {/* Form */}
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            {/* Name */}
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
+                className="text-sm font-semibold text-gray-700"
               >
                 Full name
               </label>
-              <div className="mt-1">
+              <div className={fieldWrap(errors.name)}>
+                <span className="text-gray-400">👤</span>
                 <input
                   id="name"
                   name="name"
@@ -90,24 +123,25 @@ export default function Signup() {
                   autoComplete="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.name ? "border-red-300" : "border-gray-300"
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+                  placeholder="Your name"
+                  className={inputBase}
                 />
-                {errors.name && (
-                  <p className="mt-2 text-sm text-red-600">{errors.name}</p>
-                )}
               </div>
+              {errors.name && (
+                <p className="mt-2 text-sm text-red-600">{errors.name}</p>
+              )}
             </div>
 
+            {/* Email */}
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
+                className="text-sm font-semibold text-gray-700"
               >
                 Email address
               </label>
-              <div className="mt-1">
+              <div className={fieldWrap(errors.email)}>
+                <span className="text-gray-400">📧</span>
                 <input
                   id="email"
                   name="email"
@@ -115,100 +149,132 @@ export default function Signup() {
                   autoComplete="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.email ? "border-red-300" : "border-gray-300"
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+                  placeholder="you@example.com"
+                  className={inputBase}
                 />
-                {errors.email && (
-                  <p className="mt-2 text-sm text-red-600">{errors.email}</p>
-                )}
               </div>
+              {errors.email && (
+                <p className="mt-2 text-sm text-red-600">{errors.email}</p>
+              )}
             </div>
 
+            {/* Password */}
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
+                className="text-sm font-semibold text-gray-700"
               >
                 Password
               </label>
-              <div className="mt-1">
+              <div className={fieldWrap(errors.password)}>
+                <span className="text-gray-400">🔒</span>
                 <input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPass ? "text" : "password"}
                   autoComplete="new-password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.password ? "border-red-300" : "border-gray-300"
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+                  placeholder="At least 6 characters"
+                  className={inputBase}
                 />
-                {errors.password && (
-                  <p className="mt-2 text-sm text-red-600">{errors.password}</p>
-                )}
+                <button
+                  type="button"
+                  onClick={() => setShowPass((p) => !p)}
+                  className="text-xs font-semibold text-gray-500 hover:text-gray-800"
+                >
+                  {showPass ? "Hide" : "Show"}
+                </button>
               </div>
+              {errors.password && (
+                <p className="mt-2 text-sm text-red-600">{errors.password}</p>
+              )}
             </div>
 
+            {/* Confirm Password */}
             <div>
               <label
                 htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700"
+                className="text-sm font-semibold text-gray-700"
               >
                 Confirm password
               </label>
-              <div className="mt-1">
+              <div className={fieldWrap(errors.confirmPassword)}>
+                <span className="text-gray-400">✅</span>
                 <input
                   id="confirmPassword"
                   name="confirmPassword"
-                  type="password"
+                  type={showConfirm ? "text" : "password"}
                   autoComplete="new-password"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.confirmPassword
-                      ? "border-red-300"
-                      : "border-gray-300"
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+                  placeholder="Repeat your password"
+                  className={inputBase}
                 />
-                {errors.confirmPassword && (
-                  <p className="mt-2 text-sm text-red-600">
-                    {errors.confirmPassword}
-                  </p>
-                )}
+                <button
+                  type="button"
+                  onClick={() => setShowConfirm((p) => !p)}
+                  className="text-xs font-semibold text-gray-500 hover:text-gray-800"
+                >
+                  {showConfirm ? "Hide" : "Show"}
+                </button>
               </div>
+              {errors.confirmPassword && (
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.confirmPassword}
+                </p>
+              )}
             </div>
 
-            <div className="flex items-center">
-              <input
-                id="terms-and-privacy"
-                name="terms-and-privacy"
-                type="checkbox"
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-              />
-              <label
-                htmlFor="terms-and-privacy"
-                className="ml-2 block text-sm text-gray-900"
-              >
-                I agree to the{" "}
-                <a href="#" className="text-indigo-600 hover:text-indigo-500">
-                  Terms
-                </a>{" "}
-                and{" "}
-                <a href="#" className="text-indigo-600 hover:text-indigo-500">
-                  Privacy Policy
-                </a>
-              </label>
-            </div>
-
+            {/* Terms */}
             <div>
-              <button
-                type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Sign up
-              </button>
+              <label className="flex items-start gap-3 rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm">
+                <input
+                  id="agree"
+                  name="agree"
+                  type="checkbox"
+                  checked={formData.agree}
+                  onChange={handleChange}
+                  className="mt-1 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                />
+                <span className="text-sm text-gray-700">
+                  I agree to the{" "}
+                  <a
+                    href="#"
+                    className="font-semibold text-indigo-700 hover:underline"
+                  >
+                    Terms
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    href="#"
+                    className="font-semibold text-indigo-700 hover:underline"
+                  >
+                    Privacy Policy
+                  </a>
+                  .
+                </span>
+              </label>
+
+              {errors.agree && (
+                <p className="mt-2 text-sm text-red-600">{errors.agree}</p>
+              )}
             </div>
+
+            {/* Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-2xl py-3 text-sm font-semibold text-white shadow-sm transition
+                bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-95
+                disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {loading ? "Creating account..." : "Sign up"}
+            </button>
+
+            <p className="text-center text-xs text-gray-500">
+              By creating an account you agree to our policies.
+            </p>
           </form>
         </div>
       </div>
